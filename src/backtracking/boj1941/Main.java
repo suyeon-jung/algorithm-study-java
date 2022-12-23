@@ -1,4 +1,4 @@
-package boj1941;
+package backtracking.boj1941;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,11 +31,6 @@ public class Main {
             }
         }
 
-        /**
-         * 1. 7명의 여학생(7명의 자리 위치 어떻게 뽑아내지??) -> 조합으로 자리 뽑아내기
-         * 2. 가로나 세로로 반드시 인접 -> 인접한지 확인
-         * 3. 이다솜파(S) 학생들로만 구성될 필요는 없지만 이다솜파(S) > 임도연파(Y) => 이다솜파(S)가 적어도 4명 이상 포함
-         */
         getCombinations(0, 0, 0);
 
         System.out.println(ans);
@@ -112,10 +107,8 @@ public class Main {
 
         }
 
-        if (area == 7) { // 이경우에만 모든 노드가 인접한 것임!
-            return true;
-        }
-        return false;
+        // 이경우에만 모든 노드가 인접한 것임!
+        return area == 7;
     }
 
 }
