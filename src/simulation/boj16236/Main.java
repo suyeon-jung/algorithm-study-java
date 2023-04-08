@@ -36,10 +36,7 @@ public class Main {
         }
 
 
-        System.out.println("fishCount = " + fishCount);
-        System.out.println("time = " + time);
-
-
+        System.out.println(time);
     }
 
     private static void init() throws IOException {
@@ -71,7 +68,7 @@ public class Main {
             Position cur = q.poll();
             int cx = cur.row;
             int cy = cur.col;
-            int cDistance = cur.distance;
+            int distance = cur.distance;
 
             for (int dir = 0; dir < 4; dir++) {
                 int nx = cx + dx[dir];
@@ -80,33 +77,42 @@ public class Main {
                 /** 지나갈 수 없는 경우 */
                 if (isOOB(nx, ny) || visited[nx][ny] || board[nx][ny] > babySharkSize) continue;
 
-                /** 먹을 수 있는 경우 - 여기서 이번 BFS 좋료 */
-                if (board[nx][ny] < babySharkSize && board[nx][ny] > 0) {
-                    start = new Position(nx, ny, cDistance + 1);
+                /** 지나갈 수 있는 경우 */
+                if(isMoveable(board[nx][ny], babySharkSize)) {
+                    q.offer(new Position(nx, ny, distance + 1));
+                    visited[nx][ny] = true;
+                }
+            }
+
+            /** 먹을 수 있는지 확인 */
+            if(q.peek() != null) {
+                int row = q.peek().row;
+                int col = q.peek().col;
+                if(isEatable(board[row][col], babySharkSize)) {
+                    start = new Position(row, col, 0);
 
                     eatingCount++;
                     if (eatingCount == babySharkSize) {
                         babySharkSize++;
                         eatingCount = 0;
                     }
-                    board[nx][ny] = 0;
+                    board[row][col] = 0;
                     fishCount--;
 
 
-                    time += cDistance + 1;
+                    time += q.peek().distance;
 
                     q.clear();
                     clearVisited();
 
-                    q.offer(new Position(nx, ny, 0));
-                    visited[nx][ny] = true;
-
+                    q.offer(start);
+                    visited[row][col] = true;
                     return;
                 }
-
-                q.offer(new Position(nx, ny, cDistance + 1));
-                visited[nx][ny] = true;
             }
+
+
+
         }
     }
 
@@ -120,14 +126,12 @@ public class Main {
         return x >= N || x < 0 || y >= N || y < 0;
     }
 
-    private static void print() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                System.out.print(board[i][j]);
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
+    private static boolean isMoveable(int otherSize, int mySize) {
+        return otherSize <= mySize;
+    }
+
+    private static boolean isEatable(int otherSize, int mySize) {
+        return (otherSize > 0 && otherSize < mySize);
     }
 
     static class Position {
