@@ -3,9 +3,6 @@ package dijkstra.boj1197;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -13,7 +10,6 @@ public class Main {
     static int V, E;
     static int distance;
     static int[] parent;
-    static boolean[] visited;
     static PriorityQueue<Node> pq;
 
     public static void main(String[] args) throws IOException {
